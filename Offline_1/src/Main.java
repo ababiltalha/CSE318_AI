@@ -1,4 +1,4 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static boolean isSolvable(int k, int[][] board){
@@ -43,6 +43,13 @@ public class Main {
 
         return false;
     }
+
+    private static void printSolution(SearchNode currentNode) {
+        if(currentNode==null) return;
+        printSolution(currentNode.prevNode);
+        System.out.println(currentNode);
+    }
+
     public static void main(String[] args) {
         Scanner scn= new Scanner(System.in);
         int k= scn.nextInt();
@@ -58,17 +65,54 @@ public class Main {
             }
         }
 
-        for (int i = 0; i < k; i++) {
-            for (int j = 0; j < k; j++) {
-                System.out.print(board[i][j]+" ");
-            }
-            System.out.println();
+        if(isSolvable(k,board)) System.out.println("The given puzzle is solvable");
+        else {
+            System.out.println("The given puzzle is not solvable");
+            return;
         }
 
-        if(isSolvable(k,board)) {
-            System.out.println("The given puzzle is solvable");
+        System.out.println("Choose heuristic:" +
+                "\n1. Hamming Distance" +
+                "\n2. Manhattan Distance");
+        int heuristic= scn.nextInt();
+
+        SearchNode initialNode= new SearchNode(k, board, 0, null);
+
+        int exploredNodes=0;
+        int expandedNodes=0;
+
+        HammingCostComparator hammingComparator=new HammingCostComparator();
+        ManhattanCostComparator manhattanComparator=new ManhattanCostComparator();
+        PriorityQueue<SearchNode> openList;
+        if(heuristic==1) openList= new PriorityQueue<>(hammingComparator);
+        else openList= new PriorityQueue<>(manhattanComparator);
+        HashSet<SearchNode> closedList= new HashSet<>();
+
+        openList.add(initialNode);
+        SearchNode currentNode=initialNode;
+        while(!openList.isEmpty()){
+            currentNode=openList.poll();
+            exploredNodes++;
+//            System.out.println(currentNode);
+            if (currentNode.goalBoardReached()){
+                System.out.println("Goal board reached. Total moves: "+currentNode.cost);
+                break;
+            }
+            closedList.add(currentNode);
+            for (SearchNode node :
+                    currentNode.getNeighbourNodes()) {
+                if(!closedList.contains(node)) {
+                    expandedNodes++;
+                    openList.add(node);
+//                    System.out.println(node);
+                }
+            }
         }
-        else System.out.println("The given puzzle is not solvable");
+        printSolution(currentNode);
+        System.out.println("Explored nodes: "+exploredNodes);
+        System.out.println("Expanded nodes: "+expandedNodes);
+
+
     }
 
 
