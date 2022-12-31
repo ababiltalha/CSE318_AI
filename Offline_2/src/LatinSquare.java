@@ -17,7 +17,7 @@ public class LatinSquare {
                 this.latinSquare[i][j] = new Variable(N, i, j, inputSquare[i][j]);
                 if (inputSquare[i][j] == 0) {
                     this.emptyVariables.add(this.latinSquare[i][j]);
-                }
+                } else this.latinSquare[i][j].domain = null;
             }
         }
         updateDomains();
@@ -49,6 +49,10 @@ public class LatinSquare {
     }
 
     public ArrayList<Variable> setValue(Variable variable, int value) {
+        if (value == 0) {
+            System.out.println("0 in value");
+            return null;
+        }
         variable.setValue(value);
         this.emptyVariables.remove(variable);
         ArrayList<Variable> updatedVariables = new ArrayList<>();
@@ -69,7 +73,7 @@ public class LatinSquare {
     }
 
     public void unsetValue(Variable variable, ArrayList<Variable> updatedVariables) {
-        if (variable.value == 0) return;
+//        if (variable.value == 0) return;
         int value = variable.unsetValue();
         this.emptyVariables.add(variable);
         for (Variable v :
