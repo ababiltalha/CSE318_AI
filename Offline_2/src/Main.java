@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        File input = new File("data/data-new/d-10-01.txt");
+        File input = new File("data/data-new/d-15-01.txt");
         Scanner scn = null;
         try {
             scn = new Scanner(input);
@@ -22,8 +22,11 @@ public class Main {
         }
 
         LatinSquare latinSquare = new LatinSquare(N, inputSquare);
-        VAH1 vah1 = new VAH1();
-        LatinSquareSolver latinSquareSolver = new LatinSquareSolver(latinSquare, vah1);
+//        LatinSquareSolver latinSquareSolver = new LatinSquareSolver(latinSquare, new VAH1());
+//        LatinSquareSolver latinSquareSolver = new LatinSquareSolver(latinSquare, new VAH2());
+//        LatinSquareSolver latinSquareSolver = new LatinSquareSolver(latinSquare, new VAH3());
+        LatinSquareSolver latinSquareSolver = new LatinSquareSolver(latinSquare, new VAH4());
+//        LatinSquareSolver latinSquareSolver = new LatinSquareSolver(latinSquare, new VAH5());
         long startTime = System.currentTimeMillis();
         if(latinSquareSolver.backtrack()) {
             System.out.println(latinSquare);

@@ -4,7 +4,7 @@ public class VAH1 extends VariableOrderHeuristic {
     public Variable getNextVariable(LatinSquare latinSquare) {
         Variable nextVariable = null;
         for (Variable v :
-                latinSquare.emptyVariables) {
+                latinSquare.unassignedVariables) {
             if (nextVariable == null || v.getDomainSize() < nextVariable.getDomainSize()) {
                 nextVariable = v;
             }

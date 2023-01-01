@@ -4,31 +4,31 @@ public class LatinSquare {
     public int N;
     public int[][] inputSquare;
     public Variable[][] latinSquare;
-    public ArrayList<Variable> emptyVariables;
+    public ArrayList<Variable> unassignedVariables;
 
     LatinSquare(int N, int[][] inputSquare) {
         this.N = N;
         this.inputSquare = inputSquare;
         this.latinSquare = new Variable[N][N];
-        this.emptyVariables = new ArrayList<>();
+        this.unassignedVariables = new ArrayList<>();
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 this.latinSquare[i][j] = new Variable(N, i, j, inputSquare[i][j]);
                 if (inputSquare[i][j] == 0) {
-                    this.emptyVariables.add(this.latinSquare[i][j]);
+                    this.unassignedVariables.add(this.latinSquare[i][j]);
                 } else this.latinSquare[i][j].domain = null;
             }
         }
         updateDomains();
     }
-    ArrayList<Variable> getEmptyVariables() {
-        return this.emptyVariables;
+    ArrayList<Variable> getUnassignedVariables() {
+        return this.unassignedVariables;
     }
 
     public void updateDomains(){
         for (Variable v :
-                this.emptyVariables) {
+                this.unassignedVariables) {
             for (int i = 0; i < N; i++) {
                 if (this.inputSquare[v.row][i] != 0) {
                     v.domain[this.inputSquare[v.row][i]-1] = false;
@@ -54,7 +54,7 @@ public class LatinSquare {
             return null;
         }
         variable.setValue(value);
-        this.emptyVariables.remove(variable);
+        this.unassignedVariables.remove(variable);
         ArrayList<Variable> updatedVariables = new ArrayList<>();
         boolean domainEmptied = false; // denotes if the domain of any variable was emptied
         for (int i = 0; i < N; i++) {
@@ -75,7 +75,7 @@ public class LatinSquare {
     public void unsetValue(Variable variable, ArrayList<Variable> updatedVariables) {
 //        if (variable.value == 0) return;
         int value = variable.unsetValue();
-        this.emptyVariables.add(variable);
+        this.unassignedVariables.add(variable);
         for (Variable v :
                 updatedVariables) {
             v.domain[value-1] = true;

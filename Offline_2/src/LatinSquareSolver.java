@@ -14,7 +14,7 @@ public class LatinSquareSolver {
     }
 
     public boolean backtrack() {
-        if (this.latinSquare.emptyVariables.size() == 0) return true;
+        if (this.latinSquare.unassignedVariables.size() == 0) return true;
 
         Variable nextVariable = this.variableOrderHeuristic.getNextVariable(this.latinSquare);
         if (nextVariable == null) return false;

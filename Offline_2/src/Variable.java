@@ -7,8 +7,6 @@ public class Variable {
     public int N;
     public int value;
 
-    // degree count (?)
-
     Variable(int N, int row, int col, int value) {
         this.N = N;
         this.row = row;
