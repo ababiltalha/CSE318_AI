@@ -22,8 +22,6 @@ public class VAH3 extends VariableOrderHeuristic {
                 }
             }
         }
-//        latinSquare.emptyVariables.remove(nextVariable);
-//        System.out.println(latinSquare.emptyVariables.size());
         return nextVariable;
     }
 }

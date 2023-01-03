@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class LatinSquare {
     public int N;
-    public int[][] inputSquare;
+    private final int[][] inputSquare;
     public Variable[][] latinSquare;
     public ArrayList<Variable> unassignedVariables;
 
@@ -20,13 +20,11 @@ public class LatinSquare {
                 } else this.latinSquare[i][j].domain = null;
             }
         }
-        updateDomains();
-    }
-    ArrayList<Variable> getUnassignedVariables() {
-        return this.unassignedVariables;
+        initiateDomains();
     }
 
-    public void updateDomains(){
+    // initiate domains of all variables
+    private void initiateDomains(){
         for (Variable v :
                 this.unassignedVariables) {
             for (int i = 0; i < N; i++) {
@@ -40,6 +38,7 @@ public class LatinSquare {
         }
     }
 
+    // function for checking if the current assignment is consistent
     public boolean holds(int row, int col, int value) {
         for (int i = 0; i < N; i++) {
             if (this.latinSquare[row][i].value == value) return false;
@@ -48,32 +47,37 @@ public class LatinSquare {
         return true;
     }
 
+    // function sets the value in the asked variable, and constricts the domains of the other variables
+    // in the same row and column, return a list of variables of which the domains were constricted
     public ArrayList<Variable> setValue(Variable variable, int value) {
         if (value == 0) {
             System.out.println("0 in value");
             return null;
         }
-        variable.setValue(value);
+        if(!variable.setValue(value)) {
+            System.out.println("Value not in domain");
+            return null;
+        }
         this.unassignedVariables.remove(variable);
         ArrayList<Variable> updatedVariables = new ArrayList<>();
-        boolean domainEmptied = false; // denotes if the domain of any variable was emptied
         for (int i = 0; i < N; i++) {
-            if (this.latinSquare[variable.row][i].value == 0 && i!=variable.col) {
+            if (this.latinSquare[variable.row][i].value == 0 && i!=variable.col &&
+                    this.latinSquare[variable.row][i].domain[value-1]) {
                 this.latinSquare[variable.row][i].domain[value-1] = false;
                 updatedVariables.add(this.latinSquare[variable.row][i]);
-//                if (this.latinSquare[variable.row][i].getDomainSize() == 0) domainEmptied = true;
             }
-            if (this.latinSquare[i][variable.col].value == 0 && i!=variable.row) {
+            if (this.latinSquare[i][variable.col].value == 0 && i!=variable.row &&
+                    this.latinSquare[i][variable.col].domain[value-1]) {
                 this.latinSquare[i][variable.col].domain[value-1] = false;
                 updatedVariables.add(this.latinSquare[i][variable.col]);
-//                if (this.latinSquare[i][variable.col].getDomainSize() == 0) domainEmptied = true;
             }
         }
         return updatedVariables;
     }
 
+    // function unsets the value in the asked variable,
+    // and un-constricts the domains of the other variables
     public void unsetValue(Variable variable, ArrayList<Variable> updatedVariables) {
-//        if (variable.value == 0) return;
         int value = variable.unsetValue();
         this.unassignedVariables.add(variable);
         for (Variable v :
@@ -81,7 +85,6 @@ public class LatinSquare {
             v.domain[value-1] = true;
         }
     }
-
 
     @Override
     public String toString() {

@@ -9,8 +9,6 @@ public class VAH1 extends VariableOrderHeuristic {
                 nextVariable = v;
             }
         }
-//        latinSquare.emptyVariables.remove(nextVariable);
-//        System.out.println(latinSquare.emptyVariables.size());
         return nextVariable;
     }
 }

@@ -1,9 +1,10 @@
 public class AscendingOrderedValue extends ValueOrderHeuristic {
-
     public boolean[] initialDomain;
     public AscendingOrderedValue(Variable variable) {
         this.initialDomain = variable.domain.clone();
     }
+
+    // gets the next value in the domain in ascending order
     @Override
     public int getNextValue() {
         int nextValue = 0;

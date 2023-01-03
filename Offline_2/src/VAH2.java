@@ -19,8 +19,6 @@ public class VAH2 extends VariableOrderHeuristic {
                 maxDegree = variableDegree;
             }
         }
-//        latinSquare.emptyVariables.remove(nextVariable);
-//        System.out.println(latinSquare.emptyVariables.size());
         return nextVariable;
     }
 }

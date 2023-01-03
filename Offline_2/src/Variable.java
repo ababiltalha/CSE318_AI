@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Variable {
     public boolean[] domain; // domain[i] = true if i+1 is in the domain
     public int row;
@@ -22,10 +20,6 @@ public class Variable {
             }
             this.value = 0;
         }
-    }
-
-    public void setDomain(boolean[] domain) {
-        this.domain = domain;
     }
 
     public boolean setValue(int value) {
@@ -57,7 +51,7 @@ public class Variable {
     @Override
     public String toString() {
         String s = "";
-        s += "( " + this.row + ", " + this.col + " ) : " + this.value + "\n";
+        s += "( " + this.row + ", " + this.col + " ) : " +  getDomainSize();
         return s;
     }
 
