@@ -1,10 +1,14 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        File input = new File("data/data-new/d-10-01.txt");
+        String filename = "data/data-new/d-10-09.txt";
+        File input = new File(filename);
+        writeLog("\n-\n" + filename + "\n");
         Scanner scn = null;
         try {
             scn = new Scanner(input);
@@ -37,6 +41,7 @@ public class Main {
         else if (choice == 3) latinSquareSolver = new LatinSquareSolver(latinSquare, new VAH3());
         else if (choice == 4) latinSquareSolver = new LatinSquareSolver(latinSquare, new VAH4());
         else latinSquareSolver = new LatinSquareSolver(latinSquare, new VAH5());
+        System.out.println("VAH in use: " + latinSquareSolver.variableOrderHeuristic);
 
         boolean forwardChecking = false;
         // ask for input whether to use forward checking or not
@@ -49,9 +54,12 @@ public class Main {
             if (latinSquareSolver.backtrack()) {
                 long runtime = System.currentTimeMillis() - startTime;
                 System.out.println(latinSquare);
-                System.out.println("#Backtracks = " + latinSquareSolver.getBacktrackCount());
                 System.out.println("#Node = " + latinSquareSolver.getNodeCount());
+                System.out.println("#Backtracks = " + latinSquareSolver.getBacktrackCount());
                 System.out.println("Runtime = " + runtime + "ms");
+
+                writeLog(latinSquareSolver.variableOrderHeuristic + "\n#Node = " + latinSquareSolver.getNodeCount() +
+                        "\n#Backtracks = " + latinSquareSolver.getBacktrackCount()  + "\nRuntime = " + runtime + "\n\n");
             } else System.out.println("No solution found for backtracking");
         }
         // backtrack with forward checking
@@ -60,9 +68,12 @@ public class Main {
                 long runtime = System.currentTimeMillis() - startTime;
                 System.out.println(latinSquare);
                 System.out.println("With forward checking");
-                System.out.println("#Backtracks = " + latinSquareSolver.getBacktrackCount());
                 System.out.println("#Node = " + latinSquareSolver.getNodeCount());
+                System.out.println("#Backtracks = " + latinSquareSolver.getBacktrackCount());
                 System.out.println("Runtime = " + runtime + "ms");
+
+                writeLog(latinSquareSolver.variableOrderHeuristic + "\nWith forward checking\n#Node = " + latinSquareSolver.getNodeCount() +
+                        "\n#Backtracks = " + latinSquareSolver.getBacktrackCount() + "\nRuntime = " + runtime + "\n\n");
             } else System.out.println("No solution found for backtracking with forward checking");
         }
         if(solutionCheck(latinSquare.latinSquare)) System.out.println("Solution is correct");
@@ -85,5 +96,16 @@ public class Main {
             }
         }
         return true;
+    }
+
+    // keep track of output
+    public static void writeLog(String str){
+        try {
+            FileWriter fw = new FileWriter("log.txt", true);
+            fw.write(str);
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

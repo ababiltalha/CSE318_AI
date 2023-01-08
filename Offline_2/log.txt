@@ -1,0 +1,27 @@
+
+-
+data/data-new/d-10-01.txt
+VAH1
+With forward checking
+#Node = 208
+#Backtracks = 151
+Runtime = 18
+
+
+-
+data/data-new/d-10-09.txt
+VAH1
+With forward checking
+#Node = 57
+#Backtracks = 0
+Runtime = 9
+
+
+-
+data/data-new/d-10-09.txt
+VAH1
+With forward checking
+#Node = 57
+#Backtracks = 0
+Runtime = 9
+

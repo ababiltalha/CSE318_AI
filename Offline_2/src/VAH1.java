@@ -11,4 +11,10 @@ public class VAH1 extends VariableOrderHeuristic {
         }
         return nextVariable;
     }
+
+    @Override
+    public String toString() {
+        return "VAH1";
+    }
+
 }

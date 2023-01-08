@@ -52,6 +52,7 @@ public class LatinSquareSolver {
 
         ValueOrderHeuristic valueOrderHeuristic = new AscendingOrderedValue(nextVariable);
         while (valueOrderHeuristic.hasNextValue()) {
+            boolean nextValueFlag =true;
             int nextValue = valueOrderHeuristic.getNextValue();
             this.nodeCount++;
             if (this.latinSquare.holds(nextVariable.row, nextVariable.col, nextValue)) {
@@ -63,11 +64,13 @@ public class LatinSquareSolver {
                     if (v.getDomainSize() == 0) {
                         this.latinSquare.unsetValue(nextVariable, updatedVariables);
                         this.backtrackCount++;
-                        return false;
+                        nextValueFlag = false;
                     }
                 }
-                if (backtrackWithForwardChecking()) return true; // if the next backtrack returns true, we have found a solution
-                this.latinSquare.unsetValue(nextVariable, updatedVariables);
+                if(nextValueFlag){
+                    if (backtrackWithForwardChecking()) return true; // if the next backtrack returns true, we have found a solution
+                    this.latinSquare.unsetValue(nextVariable, updatedVariables);
+                }
             }
         }
         this.backtrackCount++;

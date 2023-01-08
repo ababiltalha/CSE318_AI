@@ -23,4 +23,9 @@ public class VAH4 extends VariableOrderHeuristic {
         }
         return nextVariable;
     }
+
+    @Override
+    public String toString() {
+        return "VAH4";
+    }
 }

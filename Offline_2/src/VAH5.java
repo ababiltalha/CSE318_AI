@@ -9,4 +9,9 @@ public class VAH5 extends VariableOrderHeuristic {
         Variable nextVariable = latinSquare.unassignedVariables.get(random.nextInt(latinSquare.unassignedVariables.size()));
         return nextVariable;
     }
+
+    @Override
+    public String toString() {
+        return "VAH5";
+    }
 }
