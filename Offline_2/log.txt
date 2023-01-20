@@ -1,27 +1,27 @@
 
 -
+data/data-new/d-15-01.txt
+VAH3
+#Node = 482936
+#Backtracks = 482830
+Runtime = 3348
+
+
+-
+data/data-new/d-15-01.txt
+VAH4
+#Node = 1064131
+#Backtracks = 1064025
+Runtime = 3949
+
+
+-
+data/data-new/d-15-01.txt
+
+-
 data/data-new/d-10-01.txt
-VAH1
-With forward checking
-#Node = 208
-#Backtracks = 151
-Runtime = 18
-
-
--
-data/data-new/d-10-09.txt
-VAH1
-With forward checking
-#Node = 57
-#Backtracks = 0
-Runtime = 9
-
-
--
-data/data-new/d-10-09.txt
-VAH1
-With forward checking
-#Node = 57
-#Backtracks = 0
-Runtime = 9
+VAH5
+#Node = 2510558158
+#Backtracks = 2510558101
+Runtime = 748198
 
