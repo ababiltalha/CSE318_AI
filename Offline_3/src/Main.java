@@ -4,7 +4,10 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        String filename = "data/in";
+        Scanner scn = new Scanner(System.in);
+        // taking choices for analysis
+        String filename = "data/kfu-s-93";
+        System.out.println(filename);
         File courseFile = new File(filename + ".crs");
         File studentFile = new File(filename + ".stu");
 
@@ -12,27 +15,7 @@ public class Main {
         ArrayList<Student> students = new ArrayList<>();
 
         try {
-            Scanner scn = new Scanner(courseFile);
-            while (scn.hasNextLine()){
-                String line = scn.nextLine();
-                String[] splits = line.split(" ");
-                String courseID = splits[0];
-                int numberOfStudents = Integer.parseInt(splits[1]);
-                Course course = new Course(courseID, numberOfStudents);
-                courses.add(course);
-            }
-
-            scn = new Scanner(studentFile);
-            int studentID = 1;
-            while (scn.hasNextLine()){
-                String line = scn.nextLine();
-                String[] splits = line.split(" ");
-                Student student = new Student(studentID++, new ArrayList<>());
-                for (int i = 0; i < splits.length; i++) {
-                    student.addCourse(splits[i]);
-                }
-                students.add(student);
-            }
+            processInput(courseFile, studentFile, courses, students);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -40,12 +23,61 @@ public class Main {
 //        for (Course course : courses) System.out.println(course);
 //        for (Student student : students) System.out.println(student);
 
+        Graph graph = createGraph(courses, students);
+
+        ConstructiveHeuristic largestDegreeHeuristic = new LargestDegreeHeuristic();
+        ConstructiveHeuristic largestEnrollmentHeuristic = new LargestEnrollmentHeuristic();
+        int numberOfTimeslots = graph.colorGraph(largestDegreeHeuristic);
+        System.out.println(largestDegreeHeuristic + " : " + numberOfTimeslots);
+//        graph.printColors();
+        numberOfTimeslots = graph.colorGraph(largestEnrollmentHeuristic);
+        System.out.println(largestEnrollmentHeuristic + " : " + numberOfTimeslots);
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+    static void processInput(File courseFile, File studentFile, ArrayList<Course> courses,
+                             ArrayList<Student> students) throws FileNotFoundException {
+        Scanner scn = new Scanner(courseFile);
+        while (scn.hasNextLine()){
+            String line = scn.nextLine();
+            String[] splits = line.split(" ");
+            String courseID = splits[0];
+            int numberOfStudents = Integer.parseInt(splits[1]);
+            Course course = new Course(courseID, numberOfStudents);
+            courses.add(course);
+        }
+
+        scn = new Scanner(studentFile);
+        int studentID = 1;
+        while (scn.hasNextLine()){
+            String line = scn.nextLine();
+            String[] splits = line.split(" ");
+            Student student = new Student(studentID++, new ArrayList<>());
+            for (int i = 0; i < splits.length; i++) {
+                student.addCourse(splits[i]);
+            }
+            students.add(student);
+        }
+    }
+
+    static Graph createGraph(ArrayList<Course> courses, ArrayList<Student> students) {
         ArrayList<Node> nodes = new ArrayList<>();
         for (Course course : courses) {
             nodes.add(new Node(course));
         }
 
-        Graph graph = new Graph(nodes);
+         Graph graph = new Graph(nodes);
         for (Student student : students) {
             for (int i = 0; i < student.numberOfCourses; i++) {
                 for (int j = i + 1; j < student.numberOfCourses; j++) {
@@ -61,18 +93,8 @@ public class Main {
             }
         }
 //        graph.printAdjacencyList();
-        int numberOfTimeslots = graph.colorGraph();
-        System.out.println("Number of timeslots: " + numberOfTimeslots);
-
-
-
-
-
-
-
-
-
-
-
+        return graph;
     }
+
+
 }

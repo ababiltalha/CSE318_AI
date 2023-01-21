@@ -1,4 +1,4 @@
 public abstract class ConstructiveHeuristic {
-    public abstract Node getNextNode();
-    public abstract boolean hasNextNode();
+    public abstract Node getNextNode(Graph graph);
+    public abstract String toString();
 }

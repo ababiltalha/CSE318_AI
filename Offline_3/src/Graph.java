@@ -1,11 +1,11 @@
 import java.util.*;
 
 class Graph {
-    private int n;
-    private ArrayList<Node> vertices;
-    private LinkedList<Node>[] adjacencyList;
-    private boolean[] visited;
-    private int[] assignedColors;
+    public int n;
+    public ArrayList<Node> vertices;
+    public LinkedList<Node>[] adjacencyList;
+    public boolean[] visited;
+    public int[] assignedColors;
 
     Graph(ArrayList<Node> vertices) {
         this.n= vertices.size();
@@ -28,19 +28,19 @@ class Graph {
 
     void printAdjacencyList() {
         for (int i = 0; i < n; i++) {
-            System.out.print(vertices.get(i).course.courseID + " : ");
-            for (int j = 0; j < adjacencyList[i].size(); j++) {
-                System.out.print(adjacencyList[i].get(j).course.courseID + " ");
-            }
+            System.out.print(vertices.get(i).course.courseID + " : " + adjacencyList[i].size() + " : ");
+//            for (int j = 0; j < adjacencyList[i].size(); j++) {
+//                System.out.print(adjacencyList[i].get(j).course.courseID + " ");
+//            }
             System.out.println();
         }
     }
 
-    int colorGraph() {
+    int colorGraph(ConstructiveHeuristic constructiveHeuristic) {
         for (int i = 0; i < n; i++) {
             assignedColors[i]= -1;
         }
-        assignedColors[0]= 0;
+        assignedColors[constructiveHeuristic.getNextNode(this).index]= 0;
         int totalAssignedColors = 1;
 
         boolean usedColors[]= new boolean[n];
@@ -48,7 +48,14 @@ class Graph {
             usedColors[i]= false;
         }
 
-        for (int i = 1; i < n; i++) {
+        while (!doneColoring()) {
+            Node nextNode = constructiveHeuristic.getNextNode(this);
+            if(nextNode == null) {
+                printUncolored();
+                break;
+            }
+            int i = nextNode.index;
+//            printColors();
             for (Node node : adjacencyList[i]) {
                 int index = node.index;
                 if (assignedColors[index] != -1) usedColors[assignedColors[index]] = true;
@@ -59,12 +66,34 @@ class Graph {
             }
 
             assignedColors[i]=color;
+//            System.out.println("Coloring " + vertices.get(i).course.courseID + " with color " + color);
             totalAssignedColors= Math.max(totalAssignedColors, color+1);
             for (int j = 0; j < n; j++) {
                 usedColors[j]= false;
             }
         }
         return totalAssignedColors;
+    }
+
+    void printColors() {
+        for (int i = 0; i < n; i++) {
+            System.out.println(vertices.get(i).course.courseID + " : " + assignedColors[i]);
+        }
+    }
+
+    void printUncolored() {
+        for (int i = 0; i < n; i++) {
+            if(assignedColors[i] == -1) {
+                System.out.println(vertices.get(i).course.courseID);
+            }
+        }
+    }
+
+    boolean doneColoring() {
+        for (int i = 0; i < n; i++) {
+            if (assignedColors[i] == -1) return false;
+        }
+        return true;
     }
 
     ArrayList<Node> DFS(Node start) {
