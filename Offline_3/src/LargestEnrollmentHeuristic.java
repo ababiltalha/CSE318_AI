@@ -10,6 +10,7 @@ public class LargestEnrollmentHeuristic extends ConstructiveHeuristic {
                 nextNode = node;
             }
         }
+//        System.out.println(maxEnrollment);
         return nextNode;
     }
 

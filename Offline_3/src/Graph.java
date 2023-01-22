@@ -29,9 +29,9 @@ class Graph {
     void printAdjacencyList() {
         for (int i = 0; i < n; i++) {
             System.out.print(vertices.get(i).course.courseID + " : " + adjacencyList[i].size() + " : ");
-//            for (int j = 0; j < adjacencyList[i].size(); j++) {
-//                System.out.print(adjacencyList[i].get(j).course.courseID + " ");
-//            }
+            for (int j = 0; j < adjacencyList[i].size(); j++) {
+                System.out.print(adjacencyList[i].get(j).course.courseID + " ");
+            }
             System.out.println();
         }
     }
@@ -65,7 +65,17 @@ class Graph {
                 if (!usedColors[color]) break;
             }
 
+            // assign a color (timeslot) to the node
             assignedColors[i]=color;
+            // if the heuristic is DSatur, update the saturation degree of the adjacent nodes
+            if (constructiveHeuristic.toString().equals("DSatur")) {
+                for (Node node : adjacencyList[i]) {
+                    int index = node.index;
+                    if (assignedColors[index] == -1 && !node.saturationDegree.contains(color)) {
+                        node.saturationDegree.add(color);
+                    }
+                }
+            }
 //            System.out.println("Coloring " + vertices.get(i).course.courseID + " with color " + color);
             totalAssignedColors= Math.max(totalAssignedColors, color+1);
             for (int j = 0; j < n; j++) {

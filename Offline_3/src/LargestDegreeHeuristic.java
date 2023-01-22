@@ -12,6 +12,7 @@ public class LargestDegreeHeuristic extends ConstructiveHeuristic {
 //                System.out.println(maxDegree + " " + nextNode.course.courseID);
             }
         }
+//        System.out.println(maxDegree);
         return nextNode;
     }
 

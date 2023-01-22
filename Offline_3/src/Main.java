@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
         // taking choices for analysis
-        String filename = "data/kfu-s-93";
+        String filename = "data/tre-s-92";
         System.out.println(filename);
         File courseFile = new File(filename + ".crs");
         File studentFile = new File(filename + ".stu");
@@ -25,13 +25,25 @@ public class Main {
 
         Graph graph = createGraph(courses, students);
 
+        int numberOfTimeslots;
+
         ConstructiveHeuristic largestDegreeHeuristic = new LargestDegreeHeuristic();
         ConstructiveHeuristic largestEnrollmentHeuristic = new LargestEnrollmentHeuristic();
-        int numberOfTimeslots = graph.colorGraph(largestDegreeHeuristic);
-        System.out.println(largestDegreeHeuristic + " : " + numberOfTimeslots);
-//        graph.printColors();
+        ConstructiveHeuristic DSaturHeuristic = new DSaturHeuristic();
+        ConstructiveHeuristic randomOrderedHeuristic = new RandomOrderedHeuristic();
+
+        numberOfTimeslots = graph.colorGraph(largestDegreeHeuristic);
+        System.out.println(largestDegreeHeuristic + " heuristic applied, timeslots required : " + numberOfTimeslots);
+
         numberOfTimeslots = graph.colorGraph(largestEnrollmentHeuristic);
-        System.out.println(largestEnrollmentHeuristic + " : " + numberOfTimeslots);
+        System.out.println(largestEnrollmentHeuristic + " heuristic applied, timeslots required : " + numberOfTimeslots);
+
+        numberOfTimeslots = graph.colorGraph(DSaturHeuristic);
+        System.out.println(DSaturHeuristic + " heuristic applied, timeslots required : " + numberOfTimeslots);
+
+        numberOfTimeslots = graph.colorGraph(randomOrderedHeuristic);
+        System.out.println(randomOrderedHeuristic + " heuristic applied, timeslots required : " + numberOfTimeslots);
+
 
 
 
@@ -88,6 +100,8 @@ public class Main {
                         if (node.course.courseID.equals(courseID1)) node1 = node;
                         if (node.course.courseID.equals(courseID2)) node2 = node;
                     }
+                    if(graph.adjacencyList[node1.index].contains(node2)
+                            && graph.adjacencyList[node2.index].contains(node1)) continue;
                     graph.connect(node1, node2);
                 }
             }
