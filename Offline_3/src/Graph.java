@@ -106,6 +106,11 @@ class Graph {
         return true;
     }
 
+    int getTimeSlot(String courseID) {
+        int index = Integer.parseInt(courseID);
+        return assignedColors[index-1];
+    }
+
     ArrayList<Node> DFS(Node start) {
         for (int i = 0; i < n; i++) {
             visited[i]= false;

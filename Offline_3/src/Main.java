@@ -1,13 +1,35 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
         // taking choices for analysis
-        String filename = "data/tre-s-92";
+        String filename = "data/yor-f-83";
+
+        ConstructiveHeuristic largestDegree = new LargestDegreeHeuristic();
+        ConstructiveHeuristic largestEnrollment = new LargestEnrollmentHeuristic();
+        ConstructiveHeuristic dSatur = new DSaturHeuristic();
+        ConstructiveHeuristic random = new RandomOrderedHeuristic();
+
+        PenaltyStrategy exponential = new ExponentialStrategy();
+        PenaltyStrategy linear = new LinearStrategy();
+
+        assignTimeSlots(filename, largestDegree, exponential);
+//        assignTimeSlots(filename, dSatur, exponential);
+//        assignTimeSlots(filename, largestEnrollment, exponential);
+//        assignTimeSlots(filename, random, exponential);
+
+
+
+    }
+
+    static void assignTimeSlots(String filename, ConstructiveHeuristic constructiveHeuristic, PenaltyStrategy penaltyStrategy) {
         System.out.println(filename);
+        writeLog(filename);
         File courseFile = new File(filename + ".crs");
         File studentFile = new File(filename + ".stu");
 
@@ -26,38 +48,25 @@ public class Main {
         Graph graph = createGraph(courses, students);
 
         int numberOfTimeslots;
+        double initialPenalty;
 
-        ConstructiveHeuristic largestDegreeHeuristic = new LargestDegreeHeuristic();
-        ConstructiveHeuristic largestEnrollmentHeuristic = new LargestEnrollmentHeuristic();
-        ConstructiveHeuristic DSaturHeuristic = new DSaturHeuristic();
-        ConstructiveHeuristic randomOrderedHeuristic = new RandomOrderedHeuristic();
+        numberOfTimeslots = graph.colorGraph(constructiveHeuristic);
+        System.out.println(constructiveHeuristic + " heuristic applied, timeslots required : " + numberOfTimeslots);
+        writeLog(constructiveHeuristic + " heuristic applied, timeslots required : " + numberOfTimeslots);
 
-        numberOfTimeslots = graph.colorGraph(largestDegreeHeuristic);
-        System.out.println(largestDegreeHeuristic + " heuristic applied, timeslots required : " + numberOfTimeslots);
+        initialPenalty = penaltyStrategy.getAveragePenalty(graph, students);
+        System.out.println(penaltyStrategy + ", initial penalty : " + initialPenalty);
+        writeLog(penaltyStrategy + ", initial penalty : " + initialPenalty);
 
-        numberOfTimeslots = graph.colorGraph(largestEnrollmentHeuristic);
-        System.out.println(largestEnrollmentHeuristic + " heuristic applied, timeslots required : " + numberOfTimeslots);
-
-        numberOfTimeslots = graph.colorGraph(DSaturHeuristic);
-        System.out.println(DSaturHeuristic + " heuristic applied, timeslots required : " + numberOfTimeslots);
-
-        numberOfTimeslots = graph.colorGraph(randomOrderedHeuristic);
-        System.out.println(randomOrderedHeuristic + " heuristic applied, timeslots required : " + numberOfTimeslots);
-
-
-
-
-
-
-
-
-
+        // print vertices of the graph
+//        for (int i = 0; i < graph.vertices.size(); i++) {
+//            System.out.println(graph.vertices.get(i).course);
+//        }
 
 
 
 
     }
-
     static void processInput(File courseFile, File studentFile, ArrayList<Course> courses,
                              ArrayList<Student> students) throws FileNotFoundException {
         Scanner scn = new Scanner(courseFile);
@@ -89,7 +98,7 @@ public class Main {
             nodes.add(new Node(course));
         }
 
-         Graph graph = new Graph(nodes);
+        Graph graph = new Graph(nodes);
         for (Student student : students) {
             for (int i = 0; i < student.numberOfCourses; i++) {
                 for (int j = i + 1; j < student.numberOfCourses; j++) {
@@ -110,5 +119,16 @@ public class Main {
         return graph;
     }
 
-
+    // keep track of output
+    public static void writeLog(String str){
+        try {
+            FileWriter fw = new FileWriter("log.txt", true);
+            fw.write(str+"\n");
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
+
+

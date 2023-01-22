@@ -1,0 +1,24 @@
+data/car-f-92
+Largest Degree heuristic applied, timeslots required : 32
+Exponential Strategy, initial penalty : 10.390683533307998
+data/car-f-92
+Largest Degree heuristic applied, timeslots required : 32
+Exponential Strategy, initial penalty : 10.390683533307998
+data/car-s-91
+Largest Degree heuristic applied, timeslots required : 35
+Exponential Strategy, initial penalty : 11.9549805033676
+data/car-s-91
+Largest Degree heuristic applied, timeslots required : 35
+Exponential Strategy, initial penalty : 11.9549805033676
+data/kfu-s-93
+Largest Degree heuristic applied, timeslots required : 20
+Exponential Strategy, initial penalty : 46.616937745372965
+data/tre-s-92
+Largest Degree heuristic applied, timeslots required : 22
+Exponential Strategy, initial penalty : 15.95048143053645
+data/yor-f-83
+Largest Degree heuristic applied, timeslots required : 23
+Exponential Strategy, initial penalty : 65.6471838469713
+data/yor-f-83
+Largest Degree heuristic applied, timeslots required : 23
+Exponential Strategy, initial penalty : 65.6471838469713
