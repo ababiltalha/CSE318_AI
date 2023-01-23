@@ -22,3 +22,75 @@ Exponential Strategy, initial penalty : 65.6471838469713
 data/yor-f-83
 Largest Degree heuristic applied, timeslots required : 23
 Exponential Strategy, initial penalty : 65.6471838469713
+data/yor-f-83
+Largest Degree heuristic applied, timeslots required : 23
+Exponential Strategy, initial penalty : 65.6471838469713
+data/yor-f-83
+Largest Degree heuristic applied, timeslots required : 23
+Exponential Strategy, initial penalty : 65.6471838469713
+data/yor-f-83
+Largest Degree heuristic applied, timeslots required : 23
+Exponential Strategy, initial penalty : 65.6471838469713
+After 1001 iterations of Kempe chain interchange, penalty : 51.035069075451645
+After 1000 iterations of pair swap interchange, penalty : 51.17959617428268
+data/yor-f-83
+Largest Degree heuristic applied, timeslots required : 23
+Exponential Strategy, initial penalty : 65.6471838469713
+After 1001 iterations of Kempe chain interchange, penalty : 44.88522848034006
+After 1000 iterations of pair swap interchange, penalty : 44.88522848034006
+data/yor-f-83
+Largest Degree heuristic applied, timeslots required : 23
+Exponential Strategy, initial penalty : 65.6471838469713
+After 1000 iterations of Kempe chain interchange, penalty : 43.687566418703504
+After 1000 iterations of pair swap interchange, penalty : 43.687566418703504
+data/yor-f-83
+Largest Degree heuristic applied, timeslots required : 23
+Exponential Strategy, initial penalty : 65.6471838469713
+After 1001 iterations of Kempe chain interchange, penalty : 44.53134962805526
+After 1000 iterations of pair swap interchange, penalty : 44.53134962805526
+data/yor-f-83
+Largest Degree heuristic applied, timeslots required : 23
+Exponential Strategy, initial penalty : 65.6471838469713
+After 1000 iterations of Kempe chain interchange, penalty : 45.07757704569607
+After 1000 iterations of pair swap interchange, penalty : 45.07757704569607
+data/yor-f-83
+Largest Degree heuristic applied, timeslots required : 23
+Exponential Strategy, initial penalty : 65.6471838469713
+After 1001 iterations of Kempe chain interchange, penalty : 44.53241232731137
+After 1000 iterations of pair swap interchange, penalty : 44.53241232731137
+data/yor-f-83
+Largest Degree heuristic applied, timeslots required : 23
+Exponential Strategy, initial penalty : 65.6471838469713
+After 1000 iterations of Kempe chain interchange, penalty : 43.36875664187035
+data/yor-f-83
+Largest Degree heuristic applied, timeslots required : 23
+Exponential Strategy, initial penalty : 65.6471838469713
+After 1000 iterations of Kempe chain interchange, penalty : 45.24760892667375
+data/yor-f-83
+Largest Degree heuristic applied, timeslots required : 23
+Exponential Strategy, initial penalty : 65.6471838469713
+After 1001 iterations of Kempe chain interchange, penalty : 44.44952178533475
+data/yor-f-83
+Largest Degree heuristic applied, timeslots required : 23
+Exponential Strategy, initial penalty : 65.6471838469713
+After 1001 iterations of Kempe chain interchange, penalty : 43.61105207226355
+After 1078 iterations of pair swap interchange, penalty : 43.61105207226355
+data/tre-s-92
+Largest Degree heuristic applied, timeslots required : 22
+Exponential Strategy, initial penalty : 15.95048143053645
+After 1000 iterations of Kempe chain interchange, penalty : 12.61462631820266
+After 1598 iterations of pair swap interchange, penalty : 12.61462631820266
+data/car-s-91
+Largest Degree heuristic applied, timeslots required : 35
+Exponential Strategy, initial penalty : 11.9549805033676
+After 1001 iterations of Kempe chain interchange, penalty : 8.531785418882192
+After 11394 iterations of pair swap interchange, penalty : 8.531785418882192
+data/car-s-91
+Largest Degree heuristic applied, timeslots required : 35
+Exponential Strategy, initial penalty : 11.9549805033676
+After 1000 iterations of Kempe chain interchange, penalty : 8.492614911969751
+data/car-s-91
+Largest Degree heuristic applied, timeslots required : 35
+Exponential Strategy, initial penalty : 11.9549805033676
+After 1000 iterations of Kempe chain interchange, penalty : 8.344972232069006
+After 11308 iterations of pair swap interchange, penalty : 8.344972232069006
