@@ -5,11 +5,28 @@ import java.io.IOException;
 import java.util.*;
 
 public class Main {
-    static final int MAXITERATIONS = 10000;
+    static final int MAXITERATIONS = 1000;
 
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
         // taking choices for analysis
+        System.out.println("Enter choice of dataset:" +
+                "\n1. car-f-92" +
+                "\n2. car-s-91" +
+                "\n3. kfu-s-93" +
+                "\n4. tre-s-92" +
+                "\n5. yor-f-83");
+        int dataset = scn.nextInt()-1;
+        System.out.println("Enter choice of constructive heuristic:" +
+                "\n1. Largest Degree Heuristic" +
+                "\n2. DSatur Heuristic" +
+                "\n3. Largest Enrollment Heuristic" +
+                "\n4. Random Ordered Heuristic");
+        int heu = scn.nextInt()-1;
+        System.out.println("Enter choice of penalty strategy:" +
+                "\n1. Exponential Penalty" +
+                "\n2. Linear Penalty");
+        int pen = scn.nextInt()-1;
 
 
         String[] filename = {"data/car-f-92",
@@ -26,7 +43,7 @@ public class Main {
         PenaltyStrategy[] penaltyStrategy = {new ExponentialStrategy(),
                 new LinearStrategy()};
 
-        assignTimeSlots(filename[0], constructiveHeuristic[0], penaltyStrategy[0]);
+        assignTimeSlots(filename[dataset], constructiveHeuristic[heu], penaltyStrategy[pen]);
     }
 
     static void assignTimeSlots(String filename, ConstructiveHeuristic constructiveHeuristic, PenaltyStrategy penaltyStrategy) {
