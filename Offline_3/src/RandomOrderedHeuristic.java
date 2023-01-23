@@ -1,7 +1,7 @@
 import java.util.Random;
 
 public class RandomOrderedHeuristic extends ConstructiveHeuristic {
-    private static int SEED=12345;
+    // returns a random node
     @Override
     public Node getNextNode(Graph graph) {
         Node nextNode = null;

@@ -5,26 +5,28 @@ import java.io.IOException;
 import java.util.*;
 
 public class Main {
+    static final int MAXITERATIONS = 10000;
+
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
         // taking choices for analysis
-        String filename = "data/yor-f-83";
-
-        ConstructiveHeuristic largestDegree = new LargestDegreeHeuristic();
-        ConstructiveHeuristic largestEnrollment = new LargestEnrollmentHeuristic();
-        ConstructiveHeuristic dSatur = new DSaturHeuristic();
-        ConstructiveHeuristic random = new RandomOrderedHeuristic();
-
-        PenaltyStrategy exponential = new ExponentialStrategy();
-        PenaltyStrategy linear = new LinearStrategy();
-
-        assignTimeSlots(filename, largestDegree, exponential);
-//        assignTimeSlots(filename, dSatur, exponential);
-//        assignTimeSlots(filename, largestEnrollment, exponential);
-//        assignTimeSlots(filename, random, exponential);
 
 
+        String[] filename = {"data/car-f-92",
+                "data/car-s-91",
+                "data/kfu-s-93",
+                "data/tre-s-92",
+                "data/yor-f-83"};
 
+        ConstructiveHeuristic[] constructiveHeuristic = {new LargestDegreeHeuristic(),
+                new DSaturHeuristic(),
+                new LargestEnrollmentHeuristic(),
+                new RandomOrderedHeuristic()};
+
+        PenaltyStrategy[] penaltyStrategy = {new ExponentialStrategy(),
+                new LinearStrategy()};
+
+        assignTimeSlots(filename[0], constructiveHeuristic[0], penaltyStrategy[0]);
     }
 
     static void assignTimeSlots(String filename, ConstructiveHeuristic constructiveHeuristic, PenaltyStrategy penaltyStrategy) {
@@ -37,34 +39,37 @@ public class Main {
         ArrayList<Student> students = new ArrayList<>();
 
         try {
+            // populate courses and students lists
             processInput(courseFile, studentFile, courses, students);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-//        for (Course course : courses) System.out.println(course);
-//        for (Student student : students) System.out.println(student);
-
+        // form a graph with the data populated
         Graph graph = createGraph(courses, students);
 
         int numberOfTimeslots;
         double initialPenalty;
 
         numberOfTimeslots = graph.colorGraph(constructiveHeuristic);
+        // check if coloring breaks hard constraint
         if(graph.checkColoring()) System.out.println("Coloring is valid");
         else System.out.println("Coloring is invalid");
+
         System.out.println(constructiveHeuristic + " heuristic applied, timeslots required : " + numberOfTimeslots);
         writeLog(constructiveHeuristic + " heuristic applied, timeslots required : " + numberOfTimeslots);
 
+        // calculate initial penalty
         initialPenalty = penaltyStrategy.getAveragePenalty(graph, students);
         System.out.println(penaltyStrategy + ", initial penalty : " + initialPenalty);
-        writeLog(penaltyStrategy + ", initial penalty : " + initialPenalty);
+        writeLog(penaltyStrategy + ", initial penalty : " + String.format("%,.3f", initialPenalty));
 
         double currentPenalty = initialPenalty;
         double penaltyAfterKempeChain;
-        int maxIterations = 1000;
         int i = 0;
-        while(i < maxIterations){
+        // applying Kempe-chain Interchange
+        while(i < MAXITERATIONS){
+            // take a node at random and take a random neighbor of that node
             Node node1 = graph.vertices.get((int) ((Math.random() * graph.n)));
             Node node2;
             if(!graph.adjacencyList[node1.index].isEmpty())
@@ -74,32 +79,32 @@ public class Main {
             KempeChain.interchange(graph, node1, node2);
 //            System.out.println(graph.checkColoring());
             penaltyAfterKempeChain = penaltyStrategy.getAveragePenalty(graph, students);
+            // if decreasing penalty, continue, else interchange back
             if (penaltyAfterKempeChain < currentPenalty) currentPenalty = penaltyAfterKempeChain;
-            else {
-                KempeChain.interchange(graph, node1, node2);
-            }
+            else KempeChain.interchange(graph, node1, node2);
             i++;
         }
         System.out.println("After " + i + " iterations of Kempe chain interchange, penalty : " + currentPenalty);
-        writeLog("After " + i + " iterations of Kempe chain interchange, penalty : " + currentPenalty);
-        if(graph.checkColoring()) System.out.println("Coloring is valid");
+        writeLog("After " + i + " iterations of Kempe chain interchange, penalty : " + String.format("%,.3f", currentPenalty));
+
+        // check if interchanging breaks hard constraint
+        if(graph.checkColoring()) System.out.println("Coloring is still valid");
         else System.out.println("Coloring is invalid");
 
-        penaltyAfterKempeChain = currentPenalty;
         double penaltyAfterPairSwap;
         i = 0;
-//        Collections.shuffle(graph.vertices);
-        while(i < maxIterations){
-//            for (int index1= 0; index1 < graph.vertices.size() - 1; index1++) {
-//                for (int index2 = index1 + 1; index2 < graph.vertices.size(); index2++) {
-//                    Node node1 = graph.vertices.get(index1);
+        // applying Pair-swap Operator
+        while(i < MAXITERATIONS){
+            // take two random nodes
             Node node1 = graph.vertices.get((int) ((Math.random() * graph.n)));
-//                    Node node2 = graph.vertices.get(index2);
             Node node2 = graph.vertices.get((int) ((Math.random() * graph.n)));
+            // if same node, continue
             if (node2.course.courseID.equals(node1.course.courseID)) continue;
             int timeslot1 = graph.getTimeSlot(node1.course.courseID);
             int timeslot2 = graph.getTimeSlot(node2.course.courseID);
+            // if assigned same timeslot, continue
             if (timeslot1 == timeslot2) continue;
+            // if neighbor of one assigned same timeslot, continue
             boolean flag = false;
             for (Node neighbor : graph.adjacencyList[node1.index]) {
                 if (graph.getTimeSlot(neighbor.course.courseID) == timeslot1
@@ -113,27 +118,23 @@ public class Main {
             }
             if (flag) continue;
 
-//                    if(kempeChain1.size() == 1 && kempeChain2.size() == 1) {
-//                        for (int j = 0; j < kempeChain1.size() ; j++) System.out.print("1 " + kempeChain1.get(j).course.courseID + " " + graph.getTimeSlot(kempeChain1.get(j).course.courseID) + " vs ");
-//                        for (int j = 0; j < kempeChain2.size() ; j++) System.out.print("2 " + kempeChain2.get(j).course.courseID + " " + graph.getTimeSlot(kempeChain2.get(j).course.courseID));
-//                        System.out.println();
-            i++;
+            // swap timeslots
             graph.assignedColors[node1.index] = timeslot2;
             graph.assignedColors[node2.index] = timeslot1;
             penaltyAfterPairSwap = penaltyStrategy.getAveragePenalty(graph, students);
-//            System.out.println(graph.checkColoring());
+            // if decreasing penalty, continue, else swap back
             if (penaltyAfterPairSwap < currentPenalty) currentPenalty = penaltyAfterPairSwap;
             else {
                 graph.assignedColors[node1.index] = timeslot1;
                 graph.assignedColors[node2.index] = timeslot2;
             }
-//                    }
-//                }
-//            }
+            i++;
         }
-        System.out.println("After " + i + " iterations of pair swap interchange, penalty : " + currentPenalty);
-        writeLog("After " + i + " iterations of pair swap interchange, penalty : " + currentPenalty);
+        System.out.println("After " + i + " iterations of pair swap, penalty : " + currentPenalty);
+        writeLog("After " + i + " iterations of pair swap, penalty : " + String.format("%,.3f", currentPenalty));
 
+        if(graph.checkColoring()) System.out.println("Coloring is still valid");
+        else System.out.println("Coloring is invalid");
 
     }
     static void processInput(File courseFile, File studentFile, ArrayList<Course> courses,

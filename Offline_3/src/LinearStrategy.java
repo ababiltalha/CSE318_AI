@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class LinearStrategy extends PenaltyStrategy {
+    // calculates penalty from gaps between exams for a student in an linear manner (2*(5-gap))
     @Override
     public double getAveragePenalty(Graph graph, ArrayList<Student> students) {
         double totalPenalty = 0;

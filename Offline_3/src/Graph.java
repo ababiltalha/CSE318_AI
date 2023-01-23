@@ -1,11 +1,11 @@
 import java.util.*;
 
 class Graph {
-    public int n;
+    public int n; // number of vertices
     public ArrayList<Node> vertices;
-    public LinkedList<Node>[] adjacencyList;
+    public LinkedList<Node>[] adjacencyList; // list of neighbours of every vertex
     public boolean[] visited;
-    public int[] assignedColors;
+    public int[] assignedColors; // color assigned to each vertex
 
     Graph(ArrayList<Node> vertices) {
         this.n= vertices.size();
@@ -73,8 +73,8 @@ class Graph {
             if (constructiveHeuristic.toString().equals("DSatur")) {
                 for (Node node : adjacencyList[i]) {
                     int index = node.index;
-                    if (assignedColors[index] == -1 && !node.saturationDegree.contains(color)) {
-                        node.saturationDegree.add(color);
+                    if (assignedColors[index] == -1 && !node.neighborColors.contains(color)) {
+                        node.neighborColors.add(color);
                     }
                 }
             }

@@ -1,4 +1,5 @@
 public class LargestEnrollmentHeuristic extends ConstructiveHeuristic {
+    // returns the node with the highest enrollment of students in that course
     @Override
     public Node getNextNode(Graph graph) {
         Node nextNode = null;
@@ -10,7 +11,6 @@ public class LargestEnrollmentHeuristic extends ConstructiveHeuristic {
                 nextNode = node;
             }
         }
-//        System.out.println(maxEnrollment);
         return nextNode;
     }
 
