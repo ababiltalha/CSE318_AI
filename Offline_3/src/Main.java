@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
         // taking choices for analysis
-        String filename = "data/car-s-91";
+        String filename = "data/yor-f-83";
 
         ConstructiveHeuristic largestDegree = new LargestDegreeHeuristic();
         ConstructiveHeuristic largestEnrollment = new LargestEnrollmentHeuristic();
@@ -51,6 +51,8 @@ public class Main {
         double initialPenalty;
 
         numberOfTimeslots = graph.colorGraph(constructiveHeuristic);
+        if(graph.checkColoring()) System.out.println("Coloring is valid");
+        else System.out.println("Coloring is invalid");
         System.out.println(constructiveHeuristic + " heuristic applied, timeslots required : " + numberOfTimeslots);
         writeLog(constructiveHeuristic + " heuristic applied, timeslots required : " + numberOfTimeslots);
 
@@ -63,48 +65,71 @@ public class Main {
         int maxIterations = 1000;
         int i = 0;
         while(i < maxIterations){
-            KempeChain.interchange(graph);
+            Node node1 = graph.vertices.get((int) ((Math.random() * graph.n)));
+            Node node2;
+            if(!graph.adjacencyList[node1.index].isEmpty())
+                node2 = graph.adjacencyList[node1.index].get(
+                        (int) ((Math.random() * graph.adjacencyList[node1.index].size())));
+            else continue;
+            KempeChain.interchange(graph, node1, node2);
+//            System.out.println(graph.checkColoring());
             penaltyAfterKempeChain = penaltyStrategy.getAveragePenalty(graph, students);
             if (penaltyAfterKempeChain < currentPenalty) currentPenalty = penaltyAfterKempeChain;
             else {
-                KempeChain.interchange(graph);
-                i++;
+                KempeChain.interchange(graph, node1, node2);
             }
             i++;
         }
         System.out.println("After " + i + " iterations of Kempe chain interchange, penalty : " + currentPenalty);
         writeLog("After " + i + " iterations of Kempe chain interchange, penalty : " + currentPenalty);
+        if(graph.checkColoring()) System.out.println("Coloring is valid");
+        else System.out.println("Coloring is invalid");
 
         penaltyAfterKempeChain = currentPenalty;
         double penaltyAfterPairSwap;
         i = 0;
+//        Collections.shuffle(graph.vertices);
         while(i < maxIterations){
-            for (Node node1 : graph.vertices) {
-                for (Node node2 : graph.vertices) {
-                    if (node2 == node1) continue;
-                    int timeslot1 = graph.getTimeSlot(node1.course.courseID);
-                    int timeslot2 = graph.getTimeSlot(node2.course.courseID);
-                    if (timeslot1 == timeslot2) continue;
-                    ArrayList<Node> visited1 = new ArrayList<Node>();
-                    ArrayList<Node> kempeChain1 = new ArrayList<Node>();
-                    ArrayList<Node> visited2 = new ArrayList<Node>();
-                    ArrayList<Node> kempeChain2 = new ArrayList<Node>();
-                    KempeChain.getKempeChain(node1, timeslot2, timeslot1, visited1, kempeChain1, graph);
-                    KempeChain.getKempeChain(node2, timeslot1, timeslot2, visited2, kempeChain2, graph);
-
-                    if(kempeChain1.size() == 1 && kempeChain2.size() == 1) {
-                        i++;
-                        graph.assignedColors[node1.index] = timeslot2;
-                        graph.assignedColors[node2.index] = timeslot1;
-                        penaltyAfterPairSwap = penaltyStrategy.getAveragePenalty(graph, students);
-                        if (penaltyAfterPairSwap < currentPenalty) currentPenalty = penaltyAfterPairSwap;
-                        else {
-                            graph.assignedColors[node1.index] = timeslot1;
-                            graph.assignedColors[node2.index] = timeslot2;
-                        }
-                    }
-                }
+//            for (int index1= 0; index1 < graph.vertices.size() - 1; index1++) {
+//                for (int index2 = index1 + 1; index2 < graph.vertices.size(); index2++) {
+//                    Node node1 = graph.vertices.get(index1);
+            Node node1 = graph.vertices.get((int) ((Math.random() * graph.n)));
+//                    Node node2 = graph.vertices.get(index2);
+            Node node2 = graph.vertices.get((int) ((Math.random() * graph.n)));
+            if (node2.course.courseID.equals(node1.course.courseID)) continue;
+            int timeslot1 = graph.getTimeSlot(node1.course.courseID);
+            int timeslot2 = graph.getTimeSlot(node2.course.courseID);
+            if (timeslot1 == timeslot2) continue;
+            boolean flag = false;
+            for (Node neighbor : graph.adjacencyList[node1.index]) {
+                if (graph.getTimeSlot(neighbor.course.courseID) == timeslot1
+                        || graph.getTimeSlot(neighbor.course.courseID) == timeslot2) flag=true;
             }
+            if (flag) continue;
+            flag = false;
+            for (Node neighbor : graph.adjacencyList[node2.index]) {
+                if (graph.getTimeSlot(neighbor.course.courseID) == timeslot1
+                        || graph.getTimeSlot(neighbor.course.courseID) == timeslot2) flag=true;
+            }
+            if (flag) continue;
+
+//                    if(kempeChain1.size() == 1 && kempeChain2.size() == 1) {
+//                        for (int j = 0; j < kempeChain1.size() ; j++) System.out.print("1 " + kempeChain1.get(j).course.courseID + " " + graph.getTimeSlot(kempeChain1.get(j).course.courseID) + " vs ");
+//                        for (int j = 0; j < kempeChain2.size() ; j++) System.out.print("2 " + kempeChain2.get(j).course.courseID + " " + graph.getTimeSlot(kempeChain2.get(j).course.courseID));
+//                        System.out.println();
+            i++;
+            graph.assignedColors[node1.index] = timeslot2;
+            graph.assignedColors[node2.index] = timeslot1;
+            penaltyAfterPairSwap = penaltyStrategy.getAveragePenalty(graph, students);
+//            System.out.println(graph.checkColoring());
+            if (penaltyAfterPairSwap < currentPenalty) currentPenalty = penaltyAfterPairSwap;
+            else {
+                graph.assignedColors[node1.index] = timeslot1;
+                graph.assignedColors[node2.index] = timeslot2;
+            }
+//                    }
+//                }
+//            }
         }
         System.out.println("After " + i + " iterations of pair swap interchange, penalty : " + currentPenalty);
         writeLog("After " + i + " iterations of pair swap interchange, penalty : " + currentPenalty);

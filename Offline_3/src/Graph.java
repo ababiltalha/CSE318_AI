@@ -44,11 +44,13 @@ class Graph {
         int totalAssignedColors = 1;
 
         boolean usedColors[]= new boolean[n];
-        for (int i = 0; i < n; i++) {
-            usedColors[i]= false;
-        }
+
 
         while (!doneColoring()) {
+            for (int i = 0; i < n; i++) {
+                usedColors[i]= false;
+            }
+
             Node nextNode = constructiveHeuristic.getNextNode(this);
             if(nextNode == null) {
                 printUncolored();
@@ -102,6 +104,16 @@ class Graph {
     boolean doneColoring() {
         for (int i = 0; i < n; i++) {
             if (assignedColors[i] == -1) return false;
+        }
+        return true;
+    }
+
+    boolean checkColoring(){
+        for (int i = 0; i < n; i++) {
+            for (Node node : adjacencyList[i]) {
+                int index = node.index;
+                if (assignedColors[index] == assignedColors[i]) return false;
+            }
         }
         return true;
     }
