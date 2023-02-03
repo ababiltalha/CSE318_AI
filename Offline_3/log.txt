@@ -1,0 +1,5 @@
+data/car-f-92
+DSatur heuristic applied, timeslots required : 29
+Exponential Strategy, initial penalty : 9.971
+After 1000 iterations of Kempe chain interchange, penalty : 6.602
+After 1000 iterations of pair swap, penalty : 6.047
