@@ -22,13 +22,19 @@ class Minesweeper():
                 row.append(False)
             self.board.append(row)
 
-        # Add mines randomly
-        while len(self.mines) != mines:
-            i = random.randrange(height)
-            j = random.randrange(width)
-            if not self.board[i][j]:
-                self.mines.add((i, j))
-                self.board[i][j] = True
+        # # Add mines randomly
+        # while len(self.mines) != mines:
+        #     i = random.randrange(height)
+        #     j = random.randrange(width)
+        #     if not self.board[i][j]:
+        #         self.mines.add((i, j))
+        #         self.board[i][j] = True
+        
+        # debug
+        problem_mines = [(0,0), (1,0), (1,6), (2,5), (3,1), (3,6), (4,5), (6,7)]
+        for i,j in problem_mines:
+            self.mines.add((i, j))
+            self.board[i][j] = True
 
         # At first, player has found no mines
         self.mines_found = set()
@@ -222,29 +228,35 @@ class MinesweeperAI():
                 count -= 1
             elif neighbor not in self.moves_made and neighbor not in self.mines:
                 unchecked_neighbors.add(neighbor)
+        new_sentence = Sentence(unchecked_neighbors, count)
         if len(unchecked_neighbors) > 0:
-            self.knowledge.append(Sentence(unchecked_neighbors, count))
-        # mark new safe or mine
-        for sentence in self.knowledge:			
-            if sentence.known_mines():			
-                for mine in sentence.known_mines().copy():			
-                    self.mark_mine(mine)			
-            if sentence.known_safes():			
-                for safe in sentence.known_safes().copy():			
-                    self.mark_safe(safe)			
-        # ignore same sentence and add inferrable sentence 
-        # (used given formula)
-        for sentence1 in self.knowledge:			
-            for sentence2 in self.knowledge:			
-                if sentence1 is sentence2:			
-                    continue			
-                if sentence1 == sentence2:			
-                    self.knowledge.remove(sentence2)
+            self.knowledge.append(new_sentence)
+            
+        flag = True
+        while(flag):
+            flag = False
+            # mark new safe or mine
+            for sentence in self.knowledge:
+                if sentence.known_mines():
+                    for mine in sentence.known_mines().copy():
+                        self.mark_mine(mine)
+                if sentence.known_safes():
+                    for safe in sentence.known_safes().copy():
+                        self.mark_safe(safe)
+                        
+            # ignore same sentence and add inferrable sentence 
+            # (used given formula)
+            for sentence in self.knowledge:
+                if sentence == new_sentence:
+                    self.knowledge.remove(new_sentence)
                     continue
-                if sentence1.cells.issubset(sentence2.cells):			
-                    sentence3 = Sentence(sentence2.cells - sentence1.cells, sentence2.count - sentence1.count)			
-                    if sentence3 not in self.knowledge:			
-                        self.knowledge.append(sentence3)
+                if sentence.count == 0 or new_sentence.count == 0:
+                    continue
+                if new_sentence.cells.issubset(sentence.cells):
+                    inferrable_sentence = Sentence(sentence.cells - new_sentence.cells, sentence.count - new_sentence.count)
+                    if inferrable_sentence not in self.knowledge:
+                        self.knowledge.append(inferrable_sentence)
+                        flag = True
         
                 
 
@@ -271,8 +283,14 @@ class MinesweeperAI():
             2) are not known to be mines
         """
         # raise NotImplementedError
-        while True:
-            i = random.randint(0, self.height - 1)
-            j = random.randint(0, self.width - 1)
-            if (i, j) not in self.moves_made and (i, j) not in self.mines:
-                return (i, j)
+        possible_moves = []
+        for i in range(self.height):
+            for j in range(self.width):
+                if (i, j) not in self.moves_made and (i, j) not in self.mines:
+                    possible_moves.append((i, j))
+                    
+        if len(possible_moves) == 0:
+            return None
+        else:
+            return random.choice(list(possible_moves))
+
