@@ -23,18 +23,18 @@ class Minesweeper():
             self.board.append(row)
 
         # # Add mines randomly
-        # while len(self.mines) != mines:
-        #     i = random.randrange(height)
-        #     j = random.randrange(width)
-        #     if not self.board[i][j]:
-        #         self.mines.add((i, j))
-        #         self.board[i][j] = True
+        while len(self.mines) != mines:
+            i = random.randrange(height)
+            j = random.randrange(width)
+            if not self.board[i][j]:
+                self.mines.add((i, j))
+                self.board[i][j] = True
         
-        # debug
-        problem_mines = [(0,0), (1,0), (1,6), (2,5), (3,1), (3,6), (4,5), (6,7)]
-        for i,j in problem_mines:
-            self.mines.add((i, j))
-            self.board[i][j] = True
+        # # debug
+        # problem_mines = [(0,0), (1,0), (1,6), (2,5), (3,1), (3,6), (4,5), (6,7)]
+        # for i,j in problem_mines:
+        #     self.mines.add((i, j))
+        #     self.board[i][j] = True
 
         # At first, player has found no mines
         self.mines_found = set()
