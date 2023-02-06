@@ -240,16 +240,15 @@ class MinesweeperAI():
                 if sentence.known_mines():
                     for mine in sentence.known_mines().copy():
                         self.mark_mine(mine)
+                    self.knowledge.remove(sentence)
                 if sentence.known_safes():
                     for safe in sentence.known_safes().copy():
                         self.mark_safe(safe)
+                    self.knowledge.remove(sentence)
                         
             # ignore same sentence and add inferrable sentence 
             # (used given formula)
             for sentence in self.knowledge:
-                if sentence == new_sentence:
-                    self.knowledge.remove(new_sentence)
-                    continue
                 if sentence.count == 0 or new_sentence.count == 0:
                     continue
                 if new_sentence.cells.issubset(sentence.cells):

@@ -183,11 +183,11 @@ while True:
             move = ai.make_safe_move()
             if move is None:
                 move = ai.make_random_move()
-                print(move)
+                # print(move)
                 if move is None:
                     flags = ai.mines.copy()
-                    print(f"AI mine locations: {ai.mines}")
-                    print(f"game mines: {game.mines}")
+                    # print(f"AI mine locations: {ai.mines}")
+                    # print(f"game mines: {game.mines}")
                     print("No moves left to make.")
                 else:
                     print("No known safe moves, AI making random move.")
